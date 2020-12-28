@@ -64,8 +64,26 @@ client.on("message", async (msg) => {
       const auth = await authSpotify();
       let song = null;
 
-      if (type === "help") msg.channel.send("help");
-      else if (["tr", "ar", "al", "pl"].includes(type)) {
+      if (type === "help") {
+        const helpText = new Discord.MessageEmbed()
+          .setColor("0099ff")
+          .setThumbnail(
+            `https://icons-for-free.com/iconfiles/png/512/social+spotify+square+icon-1320185493878020594.png`
+          )
+          .setTitle(`Commands`)
+          .addFields(
+            { name: "Trigger", value: "!ss", inline: false },
+            { name: "Flags", value: "ar\ntr\npl\nal", inline: true },
+            {
+              name: "Values",
+              value: "Artist\nTrack\nPlaylist\nAlbum",
+              inline: true,
+            }
+          )
+          .setDescription(`{Trigger} {flag} {Query}`)
+          .setTimestamp();
+        msg.channel.send(helpText);
+      } else if (["tr", "ar", "al", "pl"].includes(type)) {
         let query = cmd.slice(2).join("+");
         if (!query) msg.channel.send("Invalid Query");
         else song = await getFromSpotify(auth, type, query);
